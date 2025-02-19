@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (value === 'DE') {
                 currentInput = currentInput.slice(0, -1);
                 inputBox.value = currentInput || '0';
-            } else if (value === '%' || value === '/' || value === '*' || value === '+') {
+            } else if (value === '/' || value === '*' || value === '+' || value === '-') {
                 if (currentInput) {
                     firstOperand = currentInput;
                     operator = value;
@@ -31,6 +31,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     currentInput = result.toString();
                     operator = '';
                     firstOperand = '';
+                }
+            } else if (value === '%') {
+                if (firstOperand && operator && currentInput) {
+                    const result = calculate(parseFloat(firstOperand), parseFloat(currentInput) / 100, operator);
+                    inputBox.value = result;
+                    currentInput = result.toString();
+                    operator = '';
+                    firstOperand = '';
+                } else if (currentInput) {
+                    const result = parseFloat(currentInput) / 100;
+                    inputBox.value = result;
+                    currentInput = result.toString();
                 }
             } else {
                 currentInput += value;
@@ -49,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return a * b;
             case '/':
                 return a / b;
-            case '%':
-                return a % b;
             default:
                 return 0;
         }
